@@ -1,8 +1,8 @@
 [project]
 title = Appodeal Demo
 version = 0.1
-dependencies = https://github.com/andsve/dirtylarry/archive/master.zip
 write_log = 1
+dependencies#0 = https://github.com/andsve/dirtylarry/archive/master.zip
 
 [bootstrap]
 main_collection = /main/main.collectionc
@@ -25,8 +25,12 @@ bundle_identifier = com.appodeal.testing
 shared_state = 1
 
 [android]
-package = com.appodeal.test
-manifest = /appodeal/AndroidManifest.xml
+package = com.defold.adtest
+minimum_sdk_version = 21
 
 [native_extension]
-app_manifest = game.appmanifest
+app_manifest = /game.appmanifest
+
+[library]
+include_dirs = appodeal
+

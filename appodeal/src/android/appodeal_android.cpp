@@ -37,9 +37,19 @@ JNIEXPORT void JNICALL Java_com_appodeal_defold_AppodealAndroid_onBannerShown(JN
         g_appodealListener->callWithNoParam((int)BANNER_SHOWN);
 }
 
+JNIEXPORT void JNICALL Java_com_appodeal_defold_AppodealAndroid_onBannerShowFailed(JNIEnv *env, jclass jcls) {
+    if (g_appodealListener)
+    g_appodealListener->callWithNoParam((int)BANNER_SHOW_FAILED);
+}
+
 JNIEXPORT void JNICALL Java_com_appodeal_defold_AppodealAndroid_onBannerClicked(JNIEnv *env, jclass jcls) {
 	if (g_appodealListener)
         g_appodealListener->callWithNoParam((int)BANNER_CLICKED);
+}
+
+JNIEXPORT void JNICALL Java_com_appodeal_defold_AppodealAndroid_onBannerExpired(JNIEnv *env, jclass jcls) {
+    if (g_appodealListener)
+    g_appodealListener->callWithNoParam((int)BANNER_EXPIRED);
 }
 
 JNIEXPORT void JNICALL Java_com_appodeal_defold_AppodealAndroid_onInterstitialLoaded(JNIEnv *env, jclass jcls) {
@@ -57,6 +67,11 @@ JNIEXPORT void JNICALL Java_com_appodeal_defold_AppodealAndroid_onInterstitialSh
         g_appodealListener->callWithNoParam((int)INTERSTITIAL_SHOWN);
 }
 
+JNIEXPORT void JNICALL Java_com_appodeal_defold_AppodealAndroid_onInterstitialShowFailed(JNIEnv *env, jclass jcls) {
+    if (g_appodealListener)
+    g_appodealListener->callWithNoParam((int)INTERSTITIAL_SHOW_FAILED);
+}
+
 JNIEXPORT void JNICALL Java_com_appodeal_defold_AppodealAndroid_onInterstitialClicked(JNIEnv *env, jclass jcls) {
 	if (g_appodealListener)
         g_appodealListener->callWithNoParam((int)INTERSTITIAL_CLICKED);
@@ -65,6 +80,11 @@ JNIEXPORT void JNICALL Java_com_appodeal_defold_AppodealAndroid_onInterstitialCl
 JNIEXPORT void JNICALL Java_com_appodeal_defold_AppodealAndroid_onInterstitialClosed(JNIEnv *env, jclass jcls) {
 	if (g_appodealListener)
         g_appodealListener->callWithNoParam((int)INTERSTITIAL_CLOSED);
+}
+
+JNIEXPORT void JNICALL Java_com_appodeal_defold_AppodealAndroid_onInterstitialExpired(JNIEnv *env, jclass jcls) {
+    if (g_appodealListener)
+    g_appodealListener->callWithNoParam((int)INTERSTITIAL_EXPIRED);
 }
 
 JNIEXPORT void JNICALL Java_com_appodeal_defold_AppodealAndroid_onRewardedVideoLoaded(JNIEnv *env, jclass jcls) {
@@ -82,6 +102,16 @@ JNIEXPORT void JNICALL Java_com_appodeal_defold_AppodealAndroid_onRewardedVideoS
         g_appodealListener->callWithNoParam((int)REWARDED_VIDEO_SHOWN);
 }
 
+JNIEXPORT void JNICALL Java_com_appodeal_defold_AppodealAndroid_onRewardedVideoShowFailed(JNIEnv *env, jclass jcls) {
+    if (g_appodealListener)
+    g_appodealListener->callWithNoParam((int)REWARDED_VIDEO_SHOW_FAILED);
+}
+
+JNIEXPORT void JNICALL Java_com_appodeal_defold_AppodealAndroid_onRewardedVideoClicked(JNIEnv *env, jclass jcls) {
+    if (g_appodealListener)
+    g_appodealListener->callWithNoParam((int)REWARDED_VIDEO_CLICKED);
+}
+
 JNIEXPORT void JNICALL Java_com_appodeal_defold_AppodealAndroid_onRewardedVideoClosed(JNIEnv *env, jclass jcls) {
 	if (g_appodealListener)
         g_appodealListener->callWithNoParam((int)REWARDED_VIDEO_CLOSED);
@@ -90,6 +120,11 @@ JNIEXPORT void JNICALL Java_com_appodeal_defold_AppodealAndroid_onRewardedVideoC
 JNIEXPORT void JNICALL Java_com_appodeal_defold_AppodealAndroid_onRewardedVideoFinished(JNIEnv *env, jclass jcls) {
 	if (g_appodealListener)
         g_appodealListener->callWithNoParam((int)REWARDED_VIDEO_FISNIHED);
+}
+
+JNIEXPORT void JNICALL Java_com_appodeal_defold_AppodealAndroid_onRewardedVideoExpired(JNIEnv *env, jclass jcls) {
+    if (g_appodealListener)
+    g_appodealListener->callWithNoParam((int)REWARDED_VIDEO_EXPIRED);
 }
 
 JNIEXPORT void JNICALL Java_com_appodeal_defold_AppodealAndroid_onNonSkippableVideoLoaded(JNIEnv *env, jclass jcls) {

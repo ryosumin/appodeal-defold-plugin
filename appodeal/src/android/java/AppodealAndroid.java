@@ -6,32 +6,36 @@ import android.util.Log;
 import com.appodeal.ads.Appodeal;
 import com.appodeal.ads.BannerCallbacks;
 import com.appodeal.ads.InterstitialCallbacks;
-import com.appodeal.ads.NonSkippableVideoCallbacks;
 import com.appodeal.ads.RewardedVideoCallbacks;
-import com.appodeal.ads.UserSettings;
-import com.appodeal.ads.utils.PermissionsHelper;
 
 public class AppodealAndroid {
 
     private static String LOG_TAG = "Appodeal Defold Plugin";
-    private static UserSettings userSettings;
+    //private static UserSettings userSettings;
 
     public static native void onBannerLoaded();
     public static native void onBannerFailedToLoad();
     public static native void onBannerShown();
     public static native void onBannerClicked();
+    public static native void onBannerExpired();
+    public static native void onBannerShowFailed();
 
     public static native void onInterstitialLoaded();
     public static native void onInterstitialFiledToLoad();
     public static native void onInterstitialShown();
     public static native void onInterstitialClicked();
     public static native void onInterstitialClosed();
+    public static native void onInterstitialExpired();
+    public static native void onInterstitialShowFailed();
 
     public static native void onRewardedVideoLoaded();
     public static native void onRewardedVideoFiledToLoad();
     public static native void onRewardedVideoShown();
     public static native void onRewardedVideoClosed();
     public static native void onRewardedVideoFinished();
+    public static native void onRewardedVideoExpired();
+    public static native void onRewardedVideoClicked();
+    public static native void onRewardedVideoShowFailed();
 
     public static native void onNonSkippableVideoLoaded();
     public static native void onNonSkippableVideoFiledToLoad();
@@ -39,66 +43,84 @@ public class AppodealAndroid {
     public static native void onNonSkippableVideoClosed();
     public static native void onNonSkippableVideoFinished();
 
-    private static int getNativeAdType(int adType) {
-        int type = 0;
-
-        if((adType & 3) > 0) {
-            type |= Appodeal.INTERSTITIAL;
+    private static int getAndroidAdType(int adType) {
+        if((adType & 1) > 0) {
+            return Appodeal.INTERSTITIAL;
         }
-
+        if((adType & 2) > 0) {
+            return Appodeal.BANNER;
+        }
         if((adType & 4) > 0) {
-            type |= Appodeal.BANNER;
+            return Appodeal.REWARDED_VIDEO;
         }
-
         if((adType & 8) > 0) {
-            type |= Appodeal.BANNER_BOTTOM;
+            return Appodeal.MREC;
         }
-
         if((adType & 16) > 0) {
-            type |= Appodeal.BANNER_TOP;
+            return Appodeal.NATIVE;
         }
+        return Appodeal.NONE;
+    }
 
-        if((adType & 128) > 0) {
-            type |= Appodeal.REWARDED_VIDEO;
+    private static int getAndroidAdTypes(int adTypes) {
+        int nativeAdTypes = Appodeal.NONE;
+        if((adTypes & 1) > 0) {
+            nativeAdTypes |= Appodeal.INTERSTITIAL;
         }
-
-        if((adType & 256) > 0) {
-            type |= Appodeal.NON_SKIPPABLE_VIDEO;
+        if((adTypes & 2) > 0) {
+            nativeAdTypes |= Appodeal.BANNER;
         }
+        if((adTypes & 4) > 0) {
+            nativeAdTypes |= Appodeal.REWARDED_VIDEO;
+        }
+        if((adTypes & 8) > 0) {
+            nativeAdTypes |= Appodeal.MREC;
+        }
+        if((adTypes & 16) > 0) {
+            nativeAdTypes |= Appodeal.NATIVE;
+        }
+        return nativeAdTypes;
+    }
 
-        return type;
+    private static int getAndroidShowStyle(int showStyle) {
+        if((showStyle & 1) > 0) {
+            return Appodeal.INTERSTITIAL;
+        }
+        if((showStyle & 2) > 0) {
+            return Appodeal.BANNER_BOTTOM;
+        }
+        if((showStyle & 4) > 0) {
+            return Appodeal.BANNER_TOP;
+        }
+        if((showStyle & 8) > 0) {
+            return Appodeal.BANNER_LEFT;
+        }
+        if((showStyle & 16) > 0) {
+            return Appodeal.BANNER_RIGHT;
+        }
+        if((showStyle & 32) > 0) {
+            return Appodeal.REWARDED_VIDEO;
+        }
+        return Appodeal.NONE;
+    }
+
+    private static int getNativeAdType(int adType) {
+        return getAndroidAdType(adType);
     }
 
 
-    public static void Appodeal_Initialize(final Activity activity, final String appKey, final int adType) {
-    	activity.runOnUiThread(new Runnable() {
-            public void run() {
-		    	if((adType & 3) > 0) {
-		            Appodeal.setInterstitialCallbacks(interstitialCallbacks);
-		        }
-		
-		        if((adType & 4) > 0) {
-		            Appodeal.setBannerCallbacks(bannerCallbacks);
-				}
-		
-		        if((adType & 8) > 0) {
-		            Appodeal.setBannerCallbacks(bannerCallbacks);
-		        }
-		
-		        if((adType & 16) > 0) {
-		            Appodeal.setBannerCallbacks(bannerCallbacks);
-		        }
-		
-		        if((adType & 128) > 0) {
-		            Appodeal.setRewardedVideoCallbacks(rewardedVideoCallbacks);
-		        }
-		
-		        if((adType & 256) > 0) {
-		            Appodeal.setNonSkippableVideoCallbacks(nonSkippableVideoCallbacks);
-		        }
+    private static void setCallbacks() {
+        Appodeal.setInterstitialCallbacks(interstitialCallbacks);
+        Appodeal.setBannerCallbacks(bannerCallbacks);
+        Appodeal.setRewardedVideoCallbacks(rewardedVideoCallbacks);
+    }
 
-				Appodeal.setFramework("defold", "2.1.7", true, false);
-                Appodeal.initialize(activity, appKey, getNativeAdType(adType));
+    public static void Appodeal_Initialize(final Activity activity, final String appKey, final int adType) {
+        setCallbacks();
+        activity.runOnUiThread(new Runnable() {
+            public void run() {
+                Appodeal.setFramework("defold", "2.1.7", "2.1.7");
+                Appodeal.initialize(activity, appKey, getAndroidAdTypes(adType));
             }
         });
     }
@@ -107,7 +129,7 @@ public class AppodealAndroid {
         final boolean[] show = {false};
         activity.runOnUiThread(new Runnable(){
             public void run(){
-                show[0] = Appodeal.show(activity, getNativeAdType(adType));
+                show[0] = Appodeal.show(activity, getAndroidShowStyle(adType));
             }
         });
         return show[0];
@@ -117,18 +139,18 @@ public class AppodealAndroid {
         final boolean[] show = {false};
         activity.runOnUiThread(new Runnable(){
             public void run(){
-                show[0] = Appodeal.show(activity, getNativeAdType(adType), placement);
+                show[0] = Appodeal.show(activity, getAndroidShowStyle(adType), placement);
             }
         });
         return show[0];
     }
 
     public static boolean Appodeal_IsLoaded(int adType) {
-        return Appodeal.isLoaded(getNativeAdType(adType));
+        return Appodeal.isLoaded(getAndroidAdTypes(adType));
     }
 
     public static void Appodeal_Cache(Activity activity, int adType) {
-        Appodeal.cache(activity, getNativeAdType(adType));
+        Appodeal.cache(activity, getAndroidAdTypes(adType));
     }
 
     public static void Appodeal_Hide(Activity activity, int adType) {
@@ -136,7 +158,7 @@ public class AppodealAndroid {
     }
 
     public static void Appodeal_SetAutoCache(int adType, boolean flag) {
-        Appodeal.setAutoCache(getNativeAdType(adType), flag);
+        Appodeal.setAutoCache(getAndroidAdTypes(adType), flag);
     }
 
     public static boolean Appodeal_IsPrecache(int adType) {
@@ -183,19 +205,19 @@ public class AppodealAndroid {
     }
 
     public static void Appodeal_DisableNetwork(Activity activity, String network) {
-        Appodeal.disableNetwork(activity, network);
+        Appodeal.disableNetwork(network);
     }
 
     public static void Appodeal_DisableNetworkForAdType(Activity activity, String network, int adType) {
-        Appodeal.disableNetwork(activity, network, adType);
+        Appodeal.disableNetwork(network, adType);
     }
     
     public static void Appodeal_DisableLocationPermissionCheck() {
-        Appodeal.disableLocationPermissionCheck();
+        //Appodeal.disableLocationPermissionCheck();
     }
 
     public static void Appodeal_DisableWriteExternalStoragePermissionCheck() {
-        Appodeal.disableWriteExternalStoragePermissionCheck();
+        //Appodeal.disableWriteExternalStoragePermissionCheck();
     }
 
     public static void Appodeal_MuteVideosIfCallsMuted(boolean flag) {
@@ -203,6 +225,7 @@ public class AppodealAndroid {
     }
     
     public static void Appodeal_RequestAndroidMPermissions(Activity activity) {
+        /*
         Appodeal.requestAndroidMPermissions(activity, new PermissionsHelper.AppodealPermissionCallbacks() {
             @Override
             public void writeExternalStorageResponse(int result) {
@@ -214,6 +237,7 @@ public class AppodealAndroid {
 
             }
         });
+        */
     }
 
     public static void Appodeal_ShowTestScreen(Activity activity) {
@@ -225,28 +249,28 @@ public class AppodealAndroid {
     }
 
     public static boolean Appodeal_CanShow(int adType) {
-        return Appodeal.canShow(getNativeAdType(adType));
+        return Appodeal.canShow(getAndroidAdTypes(adType));
     }
 
     public static boolean Appodeal_CanShowWithPlacement(int adType, String placement) {
-        return Appodeal.canShow(getNativeAdType(adType), placement);
+        return Appodeal.canShow(getAndroidAdTypes(adType), placement);
     }
 
     //region additional SDK calls
     public static void Appodeal_SetCustomIntRule(String name, int value) {
-        Appodeal.setCustomRule(name, value);
+        //Appodeal.setCustomRule(name, value);
     }
 
     public static void Appodeal_SetCustomBoolRule(String name, boolean value) {
-        Appodeal.setCustomRule(name, value);
+        //Appodeal.setCustomRule(name, value);
     }
 
     public static void Appodeal_SetCustomDoubleRule(String name, float value) {
-        Appodeal.setCustomRule(name, value);
+        //Appodeal.setCustomRule(name, value);
     }
 
     public static void Appodeal_SetCustomStringRule(String name, String value) {
-        Appodeal.setCustomRule(name, value);
+        //Appodeal.setCustomRule(name, value);
     }
 
     public static void Appodeal_TrackInAppPurchase(Activity activity, int amount, String currency) {
@@ -254,34 +278,28 @@ public class AppodealAndroid {
     }
 
     public static String Appodeal_GetRewardName() {
-        return Appodeal.getRewardParameters().second;
+        return Appodeal.getReward().getCurrency();
     }
 
     public static int Appodeal_GetRewardAmount() {
-        return Appodeal.getRewardParameters().first;
+        return (int)Appodeal.getReward().getAmount();
     }
 
     public static String Appodeal_GetRewardNameForPlacement(String placement) {
-        return Appodeal.getRewardParameters(placement).second;
+        return Appodeal.getReward().getCurrency();
     }
 
     public static int Appodeal_GetRewardAmountForPlacement(String placement) {
-        return Appodeal.getRewardParameters(placement).first;
+        return (int)Appodeal.getReward().getAmount();
     }
 
-    //region User Settings
-    private static UserSettings getUserSettings(Activity activity) {
-        if(userSettings == null) {
-            userSettings = Appodeal.getUserSettings(activity);
-        }
-        return userSettings;
-    }
 
     public static void Appodeal_SetUserAge(Activity activity, int age) {
-        getUserSettings(activity).setAge(age);
+        //getUserSettings(activity).setAge(age);
     }
 
     public static void Appodeal_SetUserGender(Activity activity, int gender) {
+        /*
         switch (gender) {
             case 0: getUserSettings(activity).setGender(UserSettings.Gender.OTHER);
                 break;
@@ -290,10 +308,11 @@ public class AppodealAndroid {
             case 2: getUserSettings(activity).setGender(UserSettings.Gender.MALE);
                 break;
         }
+        */
     }
 
     public static void Appodeal_SetUserId(Activity activity, String id) {
-        getUserSettings(activity).setUserId(id);
+        Appodeal.setUserId(id);
     }
 
     private static BannerCallbacks bannerCallbacks = new BannerCallbacks() {
@@ -315,6 +334,14 @@ public class AppodealAndroid {
         @Override
         public void onBannerClicked() {
             AppodealAndroid.onBannerClicked();
+        }
+        @Override
+        public void onBannerExpired() {
+            AppodealAndroid.onBannerExpired();
+        }
+        @Override
+        public void onBannerShowFailed() {
+            AppodealAndroid.onBannerShowFailed();
         }
     };
 
@@ -343,12 +370,20 @@ public class AppodealAndroid {
         public void onInterstitialClosed() {
             AppodealAndroid.onInterstitialClosed();
         }
+        @Override
+        public void onInterstitialExpired() {
+            AppodealAndroid.onInterstitialExpired();
+        }
+        @Override
+        public void onInterstitialShowFailed() {
+            AppodealAndroid.onInterstitialShowFailed();
+        }
     };
 
 
     private static RewardedVideoCallbacks rewardedVideoCallbacks = new RewardedVideoCallbacks() {
         @Override
-        public void onRewardedVideoLoaded() {
+        public void onRewardedVideoLoaded(boolean isPrecache) {
             AppodealAndroid.onRewardedVideoLoaded();
         }
 
@@ -363,7 +398,7 @@ public class AppodealAndroid {
         }
 
         @Override
-        public void onRewardedVideoFinished(int amount, String name) {
+        public void onRewardedVideoFinished(double amount, String name) {
             AppodealAndroid.onRewardedVideoFinished();
         }
 
@@ -371,33 +406,18 @@ public class AppodealAndroid {
         public void onRewardedVideoClosed(boolean finished) {
             AppodealAndroid.onRewardedVideoClosed();
         }
-    };
 
-    private static NonSkippableVideoCallbacks nonSkippableVideoCallbacks = new NonSkippableVideoCallbacks() {
         @Override
-        public void onNonSkippableVideoLoaded() {
-            AppodealAndroid.onNonSkippableVideoLoaded();
+        public void onRewardedVideoExpired() {
+            AppodealAndroid.onRewardedVideoExpired();
         }
-
         @Override
-        public void onNonSkippableVideoFailedToLoad() {
-            AppodealAndroid.onNonSkippableVideoFiledToLoad();
+        public void onRewardedVideoShowFailed() {
+            AppodealAndroid.onRewardedVideoShowFailed();
         }
-
         @Override
-        public void onNonSkippableVideoShown() {
-            AppodealAndroid.onNonSkippableVideoShown();
-        }
-
-        @Override
-        public void onNonSkippableVideoFinished() {
-            AppodealAndroid.onNonSkippableVideoFinished();
-        }
-
-        @Override
-        public void onNonSkippableVideoClosed(boolean finished) {
-            AppodealAndroid.onNonSkippableVideoClosed();
+        public void onRewardedVideoClicked() {
+            AppodealAndroid.onRewardedVideoClicked();
         }
     };
-
 }

@@ -17,7 +17,13 @@ JNIEXPORT void JNICALL Java_com_appodeal_defold_AppodealAndroid_onBannerFailedTo
 JNIEXPORT void JNICALL Java_com_appodeal_defold_AppodealAndroid_onBannerShown
   (JNIEnv *, jclass);
 
+JNIEXPORT void JNICALL Java_com_appodeal_defold_AppodealAndroid_onBannerShowFailed
+  (JNIEnv *, jclass);
+  
 JNIEXPORT void JNICALL Java_com_appodeal_defold_AppodealAndroid_onBannerClicked
+  (JNIEnv *, jclass);
+
+JNIEXPORT void JNICALL Java_com_appodeal_defold_AppodealAndroid_onBannerExpired
   (JNIEnv *, jclass);
   
 JNIEXPORT void JNICALL Java_com_appodeal_defold_AppodealAndroid_onInterstitialLoaded
@@ -29,12 +35,18 @@ JNIEXPORT void JNICALL Java_com_appodeal_defold_AppodealAndroid_onInterstitialFi
 JNIEXPORT void JNICALL Java_com_appodeal_defold_AppodealAndroid_onInterstitialShown
   (JNIEnv *, jclass);
 
+JNIEXPORT void JNICALL Java_com_appodeal_defold_AppodealAndroid_onInterstitialShowFailed
+  (JNIEnv *, jclass);
+  
 JNIEXPORT void JNICALL Java_com_appodeal_defold_AppodealAndroid_onInterstitialClicked
   (JNIEnv *, jclass);
   
 JNIEXPORT void JNICALL Java_com_appodeal_defold_AppodealAndroid_onInterstitialClosed
   (JNIEnv *, jclass);
 
+JNIEXPORT void JNICALL Java_com_appodeal_defold_AppodealAndroid_onInterstitialExpired
+  (JNIEnv *, jclass);
+  
 JNIEXPORT void JNICALL Java_com_appodeal_defold_AppodealAndroid_onRewardedVideoLoaded
   (JNIEnv *, jclass);
 
@@ -44,12 +56,21 @@ JNIEXPORT void JNICALL Java_com_appodeal_defold_AppodealAndroid_onRewardedVideoF
 JNIEXPORT void JNICALL Java_com_appodeal_defold_AppodealAndroid_onRewardedVideoShown
   (JNIEnv *, jclass);
 
+JNIEXPORT void JNICALL Java_com_appodeal_defold_AppodealAndroid_onRewardedVideoShowFailed
+  (JNIEnv *, jclass);
+
+JNIEXPORT void JNICALL Java_com_appodeal_defold_AppodealAndroid_onRewardedVideoClicked
+  (JNIEnv *, jclass);
+  
 JNIEXPORT void JNICALL Java_com_appodeal_defold_AppodealAndroid_onRewardedVideoClosed
   (JNIEnv *, jclass);
 
 JNIEXPORT void JNICALL Java_com_appodeal_defold_AppodealAndroid_onRewardedVideoFinished
   (JNIEnv *, jclass);
 
+JNIEXPORT void JNICALL Java_com_appodeal_defold_AppodealAndroid_onRewardedVideoExpired
+  (JNIEnv *, jclass);
+  
 JNIEXPORT void JNICALL Java_com_appodeal_defold_AppodealAndroid_onNonSkippableVideoLoaded
   (JNIEnv *, jclass);
 
