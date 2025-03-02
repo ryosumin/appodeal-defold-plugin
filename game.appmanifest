@@ -55,7 +55,7 @@ platforms:
     armv7-android:
         context:
             excludeLibs: []
-            excludeJars: ["(.*)/androidx-multidex.jar"]
+            excludeJars: []
             excludeSymbols: []
             symbols: []
             libs: []
@@ -65,7 +65,7 @@ platforms:
     arm64-android:
         context:
             excludeLibs: []
-            excludeJars: ["(.*)/androidx-multidex.jar"]
+            excludeJars: []
             excludeSymbols: []
             symbols: []
             libs: []
