@@ -6,5 +6,11 @@ repositories {
 }
 
 dependencies {
-  implementation 'com.appodeal.ads:sdk:3.4.1.+'
+  implementation("com.appodeal.ads:sdk:3.4.2.0") {
+        exclude group: "com.appodeal.ads.sdk.services", module: "adjust"
+        exclude group: "com.appodeal.ads.sdk.services", module: "appsflyer"
+        exclude group: "com.appodeal.ads.sdk.services", module: "facebook_analytics"
+        exclude group: "com.appodeal.ads.sdk.services", module: "firebase"
+        exclude group: "com.appodeal.ads.sdk.services", module: "sentry_analytics"
+    }
 }
