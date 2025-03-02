@@ -2,6 +2,7 @@
 #define LIB_NAME "Appodeal"
 #define MODULE_NAME "appodeal"
 
+#define DLIB_LOG_DOMAIN LIB_NAME
 #include <dmsdk/sdk.h>
 
 #if defined(DM_PLATFORM_IOS) || defined(DM_PLATFORM_ANDROID)
