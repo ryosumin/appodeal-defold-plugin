@@ -35,16 +35,6 @@ local function appodeal_ads_callback(self, msg_type)
 		print("REWARDED_VIDEO_FISNIHED")
 	elseif msg_type == appodeal.REWARDED_VIDEO_CLOSED then
 		print("REWARDED_VIDEO_CLOSED")
-	elseif msg_type == appodeal.NON_SKIPPABLE_VIDEO_LOADED then
-		print("NON_SKIPPABLE_VIDEO_LOADED")
-	elseif msg_type == appodeal.NON_SKIPPABLE_VIDEO_FAILED_TO_LOAD then
-		print("NON_SKIPPABLE_VIDEO_FAILED_TO_LOAD")
-	elseif msg_type == appodeal.NON_SKIPPABLE_VIDEO_SHOWN then
-		print("NON_SKIPPABLE_VIDEO_SHOWN")
-	elseif msg_type == appodeal.NON_SKIPPABLE_VIDEO_FISNIHED then
-		print("NON_SKIPPABLE_VIDEO_FISNIHED")
-	elseif msg_type == appodeal.NON_SKIPPABLE_VIDEO_CLOSED then
-		print("NON_SKIPPABLE_VIDEO_CLOSED")
 	end
 end
 
@@ -52,7 +42,6 @@ function on_input(self, action_id, action)
 	self.radio_value = dirtylarry:radio("radio_banner", action_id, action, appodeal.BANNER, self.radio_value)
 	self.radio_value = dirtylarry:radio("radio_interstitial", action_id, action, appodeal.INTERSTITIAL, self.radio_value)
 	self.radio_value = dirtylarry:radio("radio_rewarded", action_id, action, appodeal.REWARDED_VIDEO, self.radio_value)
-	self.radio_value = dirtylarry:radio("radio_nonskippable", action_id, action, appodeal.NON_SKIPPABLE_VIDEO, self.radio_value)
 
 	dirtylarry:button("initialize", action_id, action, function ()
 		appodeal.setCallback(appodeal_ads_callback)
@@ -81,9 +70,15 @@ function on_input(self, action_id, action)
 		appodeal.setUserGender(appodeal.GENDER_MALE)
 		appodeal.setAutoCache(appodeal.INTERSTITIAL, false)
 		if sys.get_sys_info().system_name == "Android" then
-			appodeal.initialize("fee50c333ff3825fd6ad6d38cff78154de3025546d47a84f", self.radio_value)
+			appodeal.initialize(
+        sys.get_config_string("appodeal.app_key_android","fee50c333ff3825fd6ad6d38cff78154de3025546d47a84f"),
+        self.radio_value
+      )
 		elseif sys.get_sys_info().system_name == "iPhone OS" then
-			appodeal.initialize("4b46ef930cd37cf11da84ae4d41019abb7234d5bbce3f000", self.radio_value)
+			appodeal.initialize(
+        sys.get_config_string("appodeal.app_key_ios","4b46ef930cd37cf11da84ae4d41019abb7234d5bbce3f000"),
+        self.radio_value
+      )
 		end
     end)
     

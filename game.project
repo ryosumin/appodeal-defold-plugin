@@ -34,3 +34,9 @@ app_manifest = /game.appmanifest
 [library]
 include_dirs = appodeal
 
+[admob]
+app_id_android = ca-app-pub-3940256099942544~3347511713
+
+[appodeal]
+app_key_android = d5cdd21ee4325063783422ff7943b9a870be28fd8aac62f4
+app_key_ios = d5cdd21ee4325063783422ff7943b9a870be28fd8aac62f4
